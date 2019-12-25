@@ -3,14 +3,14 @@
 // found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:math' as math;
 
-import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
+import 'package:flutter_clock_helper/model.dart';
 import 'package:intl/intl.dart';
 import 'package:vector_math/vector_math_64.dart' show radians;
 
-import 'container_hand.dart';
 import 'drawn_hand.dart';
 
 /// Total distance traveled by a second or a minute hand, each second or minute,
@@ -97,85 +97,286 @@ class _AnalogClockState extends State<AnalogClock> {
     //    [DigitalClock].
     final customTheme = Theme.of(context).brightness == Brightness.light
         ? Theme.of(context).copyWith(
-            // Hour hand.
+            canvasColor: Color(0xFFE1F5FE),
             primaryColor: Color(0xFF4285F4),
-            // Minute hand.
-            highlightColor: Color(0xFF8AB4F8),
-            // Second hand.
-            accentColor: Color(0xFF669DF6),
-            backgroundColor: Color(0xFFD2E3FC),
+            backgroundColor: Color(0xff02579B),
           )
         : Theme.of(context).copyWith(
-            primaryColor: Color(0xFFD2E3FC),
-            highlightColor: Color(0xFF4285F4),
-            accentColor: Color(0xFF8AB4F8),
-            backgroundColor: Color(0xFF3C4043),
+            canvasColor: Color(0xFF263238),
+            primaryColor: Color(0xFF1F1B24),
+            backgroundColor: Color(0xff121212),
           );
 
     final time = DateFormat.Hms().format(DateTime.now());
+    final date = DateFormat('MMMM d, yyyy').format(_now);
     final weatherInfo = DefaultTextStyle(
-      style: TextStyle(color: customTheme.primaryColor),
+      style: TextStyle(color: Colors.white, fontSize: 12),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(_temperature),
-          Text(_temperatureRange),
-          Text(_condition),
-          Text(_location),
+          Container(margin: EdgeInsets.only(bottom: 10), child: Text(date)),
+          Container(
+              margin: EdgeInsets.only(bottom: 10),
+              child: getCondition(_condition)),
+          Container(
+              margin: EdgeInsets.only(bottom: 0), child: Text(_temperature)),
         ],
       ),
     );
 
-    return Semantics.fromProperties(
-      properties: SemanticsProperties(
-        label: 'Analog clock with time $time',
-        value: time,
-      ),
-      child: Container(
-        color: customTheme.backgroundColor,
-        child: Stack(
-          children: [
-            // Example of a hand drawn with [CustomPainter].
-            DrawnHand(
-              color: customTheme.accentColor,
-              thickness: 4,
-              size: 1,
-              angleRadians: _now.second * radiansPerTick,
-            ),
-            DrawnHand(
-              color: customTheme.highlightColor,
-              thickness: 16,
-              size: 0.9,
-              angleRadians: _now.minute * radiansPerTick,
-            ),
-            // Example of a hand drawn with [Container].
-            ContainerHand(
-              color: Colors.transparent,
-              size: 0.5,
-              angleRadians: _now.hour * radiansPerHour +
-                  (_now.minute / 60) * radiansPerHour,
-              child: Transform.translate(
-                offset: Offset(0.0, -60.0),
-                child: Container(
-                  width: 32,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    color: customTheme.primaryColor,
+    return new Scaffold(
+      body: Container(
+          decoration: BoxDecoration(
+            gradient: RadialGradient(colors: [
+              customTheme.primaryColor,
+              customTheme.backgroundColor
+            ]),
+          ),
+          child: new Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: new Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  new Expanded(
+                    child: new Align(
+                      alignment: FractionalOffset.center,
+                      child: new AspectRatio(
+                        aspectRatio: 1.0,
+                        child: new Stack(
+                          children: <Widget>[
+                            Semantics.fromProperties(
+                              properties: SemanticsProperties(
+                                label: 'Analog clock with time $time',
+                                value: time,
+                              ),
+                              child: Container(
+                                child: Stack(children: [
+                                  // Hour Hand Text
+                                  HourHandsTextWidget(),
+                                  // Hour Hand Canvas
+                                  new Positioned.fill(
+                                      child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 30,
+                                            top: 30,
+                                            right: 30,
+                                            bottom: 30,
+                                          ),
+                                          child: DrawnHand(
+                                            color: customTheme.canvasColor,
+                                            thickness: 4,
+                                            size: 1,
+                                            angleRadians: hourToRadiant(
+                                                TimeOfDay.now().hourOfPeriod,
+                                                _now.minute,
+                                                _now.second),
+                                          ))),
+                                  // Minute Hand Canvas
+                                  new Positioned.fill(
+                                      child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 50,
+                                            top: 50,
+                                            right: 50,
+                                            bottom: 50,
+                                          ),
+                                          child: DrawnHand(
+                                            color: customTheme.canvasColor,
+                                            thickness: 4,
+                                            size: 1,
+                                            angleRadians: minuteToRadiant(
+                                                _now.minute, _now.second),
+                                          ))),
+                                  MinuteHandsTextWidget(),
+                                  // Weather Info
+                                  Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: weatherInfo,
+                                  ),
+                                ]),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 0,
-              bottom: 0,
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: weatherInfo,
-              ),
-            ),
-          ],
-        ),
-      ),
+                  Align(
+                      alignment: Alignment.bottomRight,
+                      child: Container(
+                          margin: EdgeInsets.only(bottom: 0),
+                          child: Text(_location,
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 10)))),
+                ]),
+          )),
     );
+  }
+
+  double hourToRadiant(int hour, int minute, int second) {
+    return ((2 * math.pi) / 12) * (hour + (minute / 100) + (second / 1000));
+  }
+
+  double minuteToRadiant(int minute, int second) {
+    return ((2 * math.pi) / 60) * (minute + second / 100);
+  }
+
+  double secondToRadiant(double second) {
+    return ((2 * math.pi) / 60) * second;
+  }
+
+  Image getCondition(String condition) {
+    double size = 40.0;
+
+    switch (condition) {
+      case "cloudy":
+        {
+          return new Image.asset(
+            'assets/cloudy_free_alexey_onufriev@2x.png',
+            width: size,
+            height: size,
+          );
+        }
+        break;
+      case "foggy":
+        {
+          return new Image.asset(
+            'assets/foggy_free_alexey_onufriev@2x.png',
+            width: size,
+            height: size,
+          );
+        }
+        break;
+      case "rainy":
+        {
+          return new Image.asset(
+            'assets/rainy_free_alexey_onufriev@2x.png',
+            width: size,
+            height: size,
+          );
+        }
+        break;
+      case "snowy":
+        {
+          return new Image.asset(
+            'assets/snow_free_alexey_onufriev@2x.png',
+            width: size,
+            height: size,
+          );
+        }
+        break;
+      case "sunny":
+        {
+          return new Image.asset(
+            'assets/sunny_free_alexey_onufriev@2x.png',
+            width: size,
+            height: size,
+          );
+        }
+        break;
+      case "thunderstorm":
+        {
+          return new Image.asset(
+            'assets/thunderstorm_free_alexey_onufriev@2x.png',
+            width: size,
+            height: size,
+          );
+        }
+        break;
+      case "windy":
+        {
+          return new Image.asset(
+            'assets/breezy_free_alexey_onufriev@2x.png',
+            width: size,
+            height: size,
+          );
+        }
+        break;
+      default:
+        {
+          return new Image.asset(
+            'assets/default_free_alexey_onufriev@2x.png',
+            width: size,
+            height: size,
+          );
+        }
+    }
+  }
+}
+
+class HourHandsTextWidget extends StatelessWidget {
+  const HourHandsTextWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return new Stack(children: <Widget>[
+      Align(
+        alignment: Alignment.topCenter,
+        child: new ClockHandWidget("12"),
+      ),
+      Align(
+        alignment: Alignment.centerRight,
+        child: new ClockHandWidget("3"),
+      ),
+      Align(
+        alignment: Alignment.centerLeft,
+        child: new ClockHandWidget("9"),
+      ),
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: new ClockHandWidget("6"),
+      )
+    ]);
+  }
+}
+
+class MinuteHandsTextWidget extends StatelessWidget {
+  const MinuteHandsTextWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.only(
+          left: 65,
+          top: 60,
+          right: 65,
+          bottom: 60,
+        ),
+        child: new Stack(children: <Widget>[
+          Align(
+            alignment: Alignment.topCenter,
+            child: new ClockHandWidget("0"),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: new ClockHandWidget("15"),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: new ClockHandWidget("45"),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: new ClockHandWidget("30"),
+          ),
+        ]));
+  }
+}
+
+class ClockHandWidget extends StatelessWidget {
+  final String text;
+
+  const ClockHandWidget(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(text,
+        style: TextStyle(
+            fontWeight: FontWeight.bold, color: Colors.white, fontSize: 10));
   }
 }

@@ -73,17 +73,20 @@ class _HandPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final center = (Offset.zero & size).center;
-    // We want to start at the top, not at the x-axis, so add pi/2.
-    final angle = angleRadians - math.pi / 2.0;
-    final length = size.shortestSide * 0.5 * handSize;
-    final position = center + Offset(math.cos(angle), math.sin(angle)) * length;
-    final linePaint = Paint()
+    Paint paint = new Paint()
       ..color = color
-      ..strokeWidth = lineWidth
-      ..strokeCap = StrokeCap.square;
+      ..strokeWidth = 10.0
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
+    paint.color = color;
 
-    canvas.drawLine(center, position, linePaint);
+    // Circle
+    canvas.drawCircle(size.center(Offset.zero), size.width / 2.0, paint);
+
+    // Arc
+    paint.color = Colors.blue;
+    canvas.drawArc(
+        Offset.zero & size, -math.pi / 2, angleRadians, false, paint);
   }
 
   @override
