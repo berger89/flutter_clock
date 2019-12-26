@@ -3,11 +3,9 @@
 
 <img src='berger_clock_light_dark.png' width='700'>
 
-|![enter image description here](https://raw.githubusercontent.com/berger89/flutter_clock/master/berger_clock_dark.png)|![enter image description here](https://raw.githubusercontent.com/berger89/flutter_clock/master/berger_clock_dark.png)||--|--|
-
 Light             |  Dark
 :-------------------------:|:-------------------------:
-![](https://raw.githubusercontent.com/berger89/flutter_clock/master/berger_clock_light.png)  |  ![](https://raw.githubusercontent.com/berger89/flutter_clock/master/berger_clock_dark.png)
+![](https://raw.githubusercontent.com/berger89/flutter_clock/master/berger_clock_light.png=w350)  |  ![](https://raw.githubusercontent.com/berger89/flutter_clock/master/berger_clock_dark.png=w350)
 
 ## Flutter Clock
 
