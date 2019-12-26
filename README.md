@@ -3,6 +3,10 @@
 
 <img src='berger_clock_light_dark.png' width='440'>
 
+<b>Outer</b> ring is the <b>hour</b> hand. <b>Inner</b> ring shows the <b>minutes</b>.
+<br>Central in the clock are the informations for current date and weather data. 
+<br>Additionally, the current location is shown in the lower right corner.
+
 Light             |  Dark
 :-------------------------:|:-------------------------:
 <img src='berger_clock_light.png' width='200'>  |  <img src='berger_clock_dark.png' width='200'>
