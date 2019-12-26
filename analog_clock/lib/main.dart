@@ -4,14 +4,20 @@
 
 import 'dart:io';
 
-import 'package:flutter_clock_helper/customizer.dart';
-import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_clock_helper/customizer.dart';
+import 'package:flutter_clock_helper/model.dart';
 
 import 'analog_clock.dart';
 
-void main() {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.landscapeLeft]);
+  await SystemChrome.setEnabledSystemUIOverlays([]);
   // A temporary measure until Platform supports web and TargetPlatform supports
   // macOS.
   if (!kIsWeb && Platform.isMacOS) {
