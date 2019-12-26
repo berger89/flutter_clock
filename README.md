@@ -1,3 +1,9 @@
+# Flutter Clock Challange
+
+<img src='berger_clock_dark.png' width='350'>
+<img src='berger_clock_light.png' width='350'>
+
+
 # Flutter Clock
 
 Welcome to Flutter Clock!
