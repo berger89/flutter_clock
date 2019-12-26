@@ -1,7 +1,8 @@
 # Flutter Clock Challange
 ### Taked the Flutter Clock challange
-<img src='berger_clock_dark.png' width='350'>
-<img src='berger_clock_light.png' width='350'>
+
+<img src='berger_clock_light_dark.png' width='700'>
+<img src='berger_clock_dark.png' width='350'><img src='berger_clock_light.png' width='350'>
 
 
 ## Flutter Clock
