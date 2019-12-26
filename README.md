@@ -1,10 +1,10 @@
 # Flutter Clock Challange
-
+### Participation in the flutter clock challange.
 <img src='berger_clock_dark.png' width='350'>
 <img src='berger_clock_light.png' width='350'>
 
 
-# Flutter Clock
+## Flutter Clock
 
 Welcome to Flutter Clock!
 
