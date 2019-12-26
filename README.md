@@ -1,5 +1,5 @@
 # Flutter Clock Challange
-### Participation in the flutter clock challange.
+### Taked the Flutter Clock challange
 <img src='berger_clock_dark.png' width='350'>
 <img src='berger_clock_light.png' width='350'>
 
