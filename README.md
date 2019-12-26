@@ -1,11 +1,11 @@
 # Flutter Clock Challange
 ### Taked the Flutter Clock challange
 
-<img src='berger_clock_light_dark.png' width='700'>
+<img src='berger_clock_light_dark.png' width='440'>
 
 Light             |  Dark
 :-------------------------:|:-------------------------:
-![](https://raw.githubusercontent.com/berger89/flutter_clock/master/berger_clock_light.png=w350)  |  ![](https://raw.githubusercontent.com/berger89/flutter_clock/master/berger_clock_dark.png=w350)
+<img src='berger_clock_light.png' width='200'>  |  <img src='berger_clock_dark.png' width='200'>
 
 ## Flutter Clock
 
