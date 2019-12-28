@@ -13,6 +13,7 @@ Light             |  Dark
 
 #### ko_fi: https://ko-fi.com/berger
 #### buymeacoffee: https://www.buymeacoffee.com/RW5zuJI
+<a href="https://www.buymeacoffee.com/RW5zuJI" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-black.png" alt="Buy Me A Coffee" style="height: 31px !important;width: 117px !important;" ></a>
 
 ## Flutter Clock
 
