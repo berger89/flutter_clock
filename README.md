@@ -11,6 +11,9 @@ Light             |  Dark
 :-------------------------:|:-------------------------:
 <img src='berger_clock_light.png' width='200'>  |  <img src='berger_clock_dark.png' width='200'>
 
+#### ko_fi: https://ko-fi.com/berger
+#### buymeacoffee: https://www.buymeacoffee.com/RW5zuJI
+
 ## Flutter Clock
 
 Welcome to Flutter Clock!
